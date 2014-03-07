@@ -6,7 +6,7 @@
     "url": "http://github.com/rymdjs/rymd-utils.git"
   },
   "description": "Shared utility functions for Rymd",
-  "version": "0.0.1",
+  "version": "0.1",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
