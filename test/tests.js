@@ -30,6 +30,21 @@ function getLocalFile(filename) {
 
 describe("Utils", function() {
 
+	describe("xhr", function() {
+
+		it("should be able to fetch a file from disk", function() {
+			var promise = Utils.xhr("/test/test-image.jpg", {
+				responseType: "blob"
+			})
+
+			return promise.then(function(response) {
+				(response instanceof Blob).should.be.true
+				response.type.should.equal("image/jpeg")
+			})
+		})
+
+	})
+
 	describe("toObjectURL", function() {
 		it("should convert a Blob to an ObjectURL", function() {
 			var data = new Blob(["Test"]),
