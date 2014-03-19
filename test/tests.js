@@ -52,9 +52,20 @@ describe("Utils", function() {
 			obj.trigger("event", "Test")
 		})
 
-		it("should listen to an events with several handlers", function(done) {
+		it("should listen to an event with several data arguments", function(done) {
+			var obj = Utils.extend({}, Utils.Events)
+
+			obj.on("event", function(data1, data2) {
+				data1.should.equal("Test")
+				data2.should.equal("Test 2")
+				done()
+			})
+
+			obj.trigger("event", "Test", "Test 2")
+		})
+
+		it("should listen to an event with several handlers", function(done) {
 			var obj = Utils.extend({}, Utils.Events),
-					obj2 = Utils.extend({}, Utils.Events)
 					counter = 0
 
 			obj.on("event", function(data) {
@@ -63,7 +74,7 @@ describe("Utils", function() {
 				if(counter === 2) done()
 			})
 
-			obj2.on("event", function(data) {
+			obj.on("event", function(data) {
 				data.should.equal("Test")
 				counter += 1
 				if(counter === 2) done()
