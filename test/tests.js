@@ -30,6 +30,49 @@ function getLocalFile(filename) {
 
 describe("Utils", function() {
 
+	describe("Events", function() {
+		it("should listen to an event", function(done) {
+			var obj = Utils.extend({}, Utils.Events)
+
+			obj.on("event", function() {
+				done()
+			})
+
+			obj.trigger("event")
+		})
+
+		it("should listen to an event with data", function(done) {
+			var obj = Utils.extend({}, Utils.Events)
+
+			obj.on("event", function(data) {
+				data.should.equal("Test")
+				done()
+			})
+
+			obj.trigger("event", "Test")
+		})
+
+		it("should listen to an events with several handlers", function(done) {
+			var obj = Utils.extend({}, Utils.Events),
+					obj2 = Utils.extend({}, Utils.Events)
+					counter = 0
+
+			obj.on("event", function(data) {
+				data.should.equal("Test")
+				counter += 1
+				if(counter === 2) done()
+			})
+
+			obj2.on("event", function(data) {
+				data.should.equal("Test")
+				counter += 1
+				if(counter === 2) done()
+			})
+
+			obj.trigger("event", "Test")
+		})
+	})
+
 	describe("xhr", function() {
 
 		it("should be able to fetch a file from disk", function() {
