@@ -64,6 +64,23 @@ describe("Utils", function() {
 			obj.trigger("event", "Test", "Test 2")
 		})
 
+		it("should delegate events to other listeners", function(done) {
+			var obj = Utils.extend({}, Utils.Events),
+					obj2 = Utils.extend({}, Utils.Events)
+
+			obj2.on("event", function(data, data2) {
+				data.should.equal("Test")
+				data2.should.equal("hej")
+				done()
+			})
+
+			obj2.bubble("event", obj, function() {
+				return "hej"
+			})
+
+			obj.trigger("event", "Test")
+		})
+
 		it("should listen to an event with several handlers", function(done) {
 			var obj = Utils.extend({}, Utils.Events),
 					counter = 0
