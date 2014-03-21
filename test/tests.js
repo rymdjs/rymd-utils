@@ -64,22 +64,55 @@ describe("Utils", function() {
 			obj.trigger("event", "Test", "Test 2")
 		})
 
-		it("should delegate events to other listeners", function(done) {
-			var obj = Utils.extend({}, Utils.Events),
-					obj2 = Utils.extend({}, Utils.Events)
+		describe("Bubbling", function() {
+			it("should delegate events to other listeners", function(done) {
+				var obj = Utils.extend({}, Utils.Events),
+						obj2 = Utils.extend({}, Utils.Events)
 
-			obj2.on("event", function(data, data2) {
-				data.should.equal("Test")
-				data2.should.equal("hej")
-				done()
+				obj2.on("event", function(data) {
+					data.should.equal("Test")
+					done()
+				})
+
+				obj2.bubble("event", obj)
+
+				obj.trigger("event", "Test")
 			})
 
-			obj2.bubble("event", obj, function() {
-				return "hej"
+			it("should support adding parameters from a callback", function(done) {
+				var obj = Utils.extend({}, Utils.Events),
+						obj2 = Utils.extend({}, Utils.Events)
+
+				obj2.on("event", function(data, data2) {
+					data.should.equal("Test")
+					data2.should.equal("hej")
+					done()
+				})
+
+				obj2.bubble("event", obj, function() {
+					return "hej"
+				})
+
+				obj.trigger("event", "Test")
 			})
 
-			obj.trigger("event", "Test")
+			it("should add the source object to the parameter list", function(done) {
+				var obj = Utils.extend({name: "source"}, Utils.Events),
+						obj2 = Utils.extend({}, Utils.Events)
+
+				obj2.on("event", function(data, source) {
+					data.should.equal("Test")
+					source.name.should.equal("source")
+					done()
+				})
+
+				obj2.bubble("event", obj)
+
+				obj.trigger("event", "Test")
+			})
+
 		})
+
 
 		it("should listen to an event with several handlers", function(done) {
 			var obj = Utils.extend({}, Utils.Events),
