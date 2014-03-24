@@ -147,6 +147,14 @@ describe("Utils", function() {
 			})
 		})
 
+		it("should reject on error", function() {
+			var promise = Utils.xhr("/bogus/url")
+
+			return promise.then(undefined, function(req) {
+				req.status.should.equal(404)
+			})
+		})
+
 	})
 
 	describe("toObjectURL", function() {
